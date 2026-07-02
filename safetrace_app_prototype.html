@@ -1,0 +1,1003 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.device-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.device {
+  width: 340px;
+  height: 680px;
+  background: #0A3D2E;
+  border-radius: 40px;
+  border: 6px solid #1a1a1a;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 0 2px #333;
+}
+
+.notch {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 26px;
+  background: #1a1a1a;
+  border-radius: 0 0 18px 18px;
+  z-index: 100;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+.screen.active { display: flex; }
+
+.status-bar {
+  padding: 32px 20px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.nav-bar {
+  padding: 10px 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 16px;
+}
+.scroll-body::-webkit-scrollbar { display: none; }
+
+.btn-primary {
+  background: #F4A92A;
+  color: #0A3D2E;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #F4A92A;
+  border: 1.5px solid #F4A92A;
+  border-radius: 14px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.card-white {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.pill-green { background: rgba(45,155,104,0.25); color: #7DEBB0; }
+.pill-red { background: rgba(220,38,38,0.25); color: #FCA5A5; }
+.pill-gold { background: rgba(244,169,42,0.25); color: #F4A92A; }
+.pill-gray { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+.avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500;
+  flex-shrink: 0;
+}
+
+.tab-bar {
+  display: flex;
+  background: rgba(0,0,0,0.3);
+  padding: 8px 8px 20px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tab-btn.active {
+  background: rgba(244,169,42,0.18);
+  color: #F4A92A;
+}
+.tab-btn i { font-size: 20px; }
+
+.map-bg {
+  flex: 1;
+  background: #1a4a35;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-grid line { stroke: rgba(255,255,255,0.06); }
+
+.map-floating {
+  position: absolute;
+  top: 12px; left: 12px; right: 12px;
+}
+
+.map-bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(10,61,46,0.98) 40%);
+  padding: 32px 16px 12px;
+}
+
+.fp-ring {
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  border: 3px solid rgba(244,169,42,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+  position: relative;
+}
+.fp-ring-inner {
+  width: 86px; height: 86px;
+  border-radius: 50%;
+  background: rgba(244,169,42,0.12);
+  border: 2px solid rgba(244,169,42,0.6);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fp-ring-inner:active { transform: scale(0.93); background: rgba(244,169,42,0.28); }
+.fp-ring-inner i { font-size: 36px; color: #F4A92A; }
+
+.input-field {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  margin-bottom: 12px;
+}
+.input-field::placeholder { color: rgba(255,255,255,0.35); }
+.input-field:focus { border-color: #F4A92A; }
+
+.divider {
+  height: 0.5px;
+  background: rgba(255,255,255,0.1);
+  margin: 12px 0;
+}
+
+.scripture {
+  text-align: center;
+  font-size: 10px;
+  color: rgba(244,169,42,0.65);
+  font-style: italic;
+  padding: 6px 12px;
+  flex-shrink: 0;
+}
+
+.sos-btn {
+  background: #DC2626;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 1px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.07);
+}
+
+.badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(45,155,104,0.2);
+  border: 1px solid rgba(45,155,104,0.4);
+  color: #7DEBB0;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.pulse-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  display: inline-block;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 16px 0 8px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.07);
+}
+
+.toggle {
+  width: 42px; height: 24px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.15);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.toggle.on { background: #2D9B68; }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px; left: 3px;
+  transition: left 0.2s;
+}
+.toggle.on::after { left: 21px; }
+
+.nav-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+}
+.nav-dot.active { background: #F4A92A; width: 18px; border-radius: 3px; }
+
+.flash-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(244,169,42,0.15);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 200;
+  transition: opacity 0.3s;
+}
+.flash-overlay.show { opacity: 1; }
+</style>
+
+<h2 class="sr-only">SafeTrace app prototype — interactive mobile screens including splash, onboarding, dashboard, tracking, contacts, SOS, and settings</h2>
+
+<div class="device-wrap">
+  <div class="device">
+    <div class="notch"></div>
+    <div class="flash-overlay" id="flashOverlay"></div>
+
+    <!-- SCREEN 1: SPLASH -->
+    <div class="screen active" id="screen-splash" style="background:#0A3D2E; align-items:center; justify-content:center; gap:0;">
+      <div style="text-align:center; padding: 0 32px;">
+        <div style="width:80px;height:80px;border-radius:24px;background:rgba(244,169,42,0.15);border:2px solid rgba(244,169,42,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+          <i class="ti ti-fingerprint" style="font-size:40px;color:#F4A92A;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:32px;font-weight:500;color:#fff;letter-spacing:-0.5px;margin-bottom:6px;">SafeTrace</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);font-style:italic;margin-bottom:40px;">Safety Without Borders</div>
+        <button class="btn-primary" onclick="goTo('screen-onboard1')" style="margin-bottom:12px;">
+          <i class="ti ti-arrow-right" aria-hidden="true"></i> Get Started
+        </button>
+        <button class="btn-outline" onclick="goTo('screen-login')">
+          Sign In
+        </button>
+      </div>
+      <div style="position:absolute;bottom:0;left:0;right:0;">
+        <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+        <div style="height:16px;"></div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: ONBOARDING 1 -->
+    <div class="screen" id="screen-onboard1" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;gap:0;">
+        <div style="width:100px;height:100px;border-radius:28px;background:rgba(244,169,42,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <i class="ti ti-map-pin" style="font-size:48px;color:#F4A92A;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:22px;font-weight:500;color:#fff;text-align:center;margin-bottom:10px;">Track anyone, anywhere</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.5);text-align:center;line-height:1.6;">Works on every phone in Nigeria — smartphone or button phone — with or without internet.</div>
+      </div>
+      <div style="padding:0 20px 12px;">
+        <div class="nav-dots" style="margin-bottom:16px;">
+          <div class="nav-dot active"></div>
+          <div class="nav-dot" onclick="goTo('screen-onboard2')"></div>
+          <div class="nav-dot" onclick="goTo('screen-onboard3')"></div>
+        </div>
+        <button class="btn-primary" onclick="goTo('screen-onboard2')" style="margin-bottom:10px;">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+        <button class="btn-ghost" onclick="goTo('screen-login')" style="width:100%;justify-content:center;">Skip</button>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 3: ONBOARDING 2 -->
+    <div class="screen" id="screen-onboard2" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;">
+        <div style="width:100px;height:100px;border-radius:28px;background:rgba(45,155,104,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <i class="ti ti-message-circle" style="font-size:48px;color:#2D9B68;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:22px;font-weight:500;color:#fff;text-align:center;margin-bottom:10px;">No internet? No problem</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.5);text-align:center;line-height:1.6;">SafeTrace uses SMS and cell towers when there's no data. Just a SIM card is enough.</div>
+      </div>
+      <div style="padding:0 20px 12px;">
+        <div class="nav-dots" style="margin-bottom:16px;">
+          <div class="nav-dot" onclick="goTo('screen-onboard1')"></div>
+          <div class="nav-dot active"></div>
+          <div class="nav-dot" onclick="goTo('screen-onboard3')"></div>
+        </div>
+        <button class="btn-primary" onclick="goTo('screen-onboard3')" style="margin-bottom:10px;">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+        <button class="btn-ghost" onclick="goTo('screen-login')" style="width:100%;justify-content:center;">Skip</button>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 4: ONBOARDING 3 -->
+    <div class="screen" id="screen-onboard3" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;">
+        <div style="width:100px;height:100px;border-radius:28px;background:rgba(220,38,38,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <i class="ti ti-alert-triangle" style="font-size:48px;color:#DC2626;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:22px;font-weight:500;color:#fff;text-align:center;margin-bottom:10px;">One tap SOS</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.5);text-align:center;line-height:1.6;">In any emergency, one tap alerts all your trusted contacts instantly with your exact location.</div>
+      </div>
+      <div style="padding:0 20px 12px;">
+        <div class="nav-dots" style="margin-bottom:16px;">
+          <div class="nav-dot" onclick="goTo('screen-onboard1')"></div>
+          <div class="nav-dot" onclick="goTo('screen-onboard2')"></div>
+          <div class="nav-dot active"></div>
+        </div>
+        <button class="btn-primary" onclick="goTo('screen-login')" style="margin-bottom:10px;">Create Account <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 5: LOGIN -->
+    <div class="screen" id="screen-login" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="padding:16px 20px 0;flex:1;display:flex;flex-direction:column;">
+        <div style="margin-bottom:24px;">
+          <div style="font-size:24px;font-weight:500;color:#fff;margin-bottom:4px;">Welcome back</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.45);">Sign in to SafeTrace</div>
+        </div>
+        <input class="input-field" type="text" placeholder="Phone number or email" />
+        <input class="input-field" type="password" placeholder="Password" />
+        <button class="btn-primary" onclick="goTo('screen-dashboard')" style="margin-bottom:12px;">Sign In</button>
+        <div style="text-align:center;font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px;">— or —</div>
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:14px;">Sign in with fingerprint</div>
+          <div class="fp-ring" onclick="fpLogin()">
+            <div class="fp-ring-inner">
+              <i class="ti ti-fingerprint" aria-label="Fingerprint login"></i>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:13px;color:rgba(255,255,255,0.4);">
+          No account? <span style="color:#F4A92A;cursor:pointer;" onclick="goTo('screen-dashboard')">Create one</span>
+        </div>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 6: DASHBOARD (map) -->
+    <div class="screen" id="screen-dashboard" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.7);">
+        <span>9:41</span><span style="display:flex;gap:4px;align-items:center;"><span class="badge-live"><span class="pulse-dot"></span>Live</span><i class="ti ti-wifi" style="font-size:13px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:13px;" aria-hidden="true"></i></span>
+      </div>
+      <div class="map-bg">
+        <svg width="100%" height="100%" style="position:absolute;inset:0;">
+          <defs>
+            <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+              <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)"/>
+          <path d="M 30 180 Q 80 160 140 170 Q 180 175 220 165 Q 260 155 290 170" stroke="rgba(255,255,255,0.12)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 60 120 Q 90 200 100 280" stroke="rgba(255,255,255,0.08)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M 180 80 Q 200 160 195 240" stroke="rgba(255,255,255,0.08)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <circle cx="148" cy="168" r="22" fill="rgba(244,169,42,0.15)" stroke="#F4A92A" stroke-width="1.5"/>
+          <circle cx="148" cy="168" r="8" fill="#F4A92A"/>
+          <circle cx="148" cy="168" r="4" fill="#fff"/>
+          <circle cx="82" cy="210" r="6" fill="#2D9B68" opacity="0.85"/>
+          <circle cx="210" cy="140" r="6" fill="#2D9B68" opacity="0.85"/>
+          <circle cx="190" cy="220" r="5" fill="#2D9B68" opacity="0.7"/>
+        </svg>
+        <div class="map-floating">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div style="background:rgba(10,61,46,0.9);border-radius:12px;padding:8px 12px;backdrop-filter:blur(4px);">
+              <div style="font-size:11px;color:rgba(255,255,255,0.5);">Tracking</div>
+              <div style="font-size:14px;font-weight:500;color:#fff;">3 contacts</div>
+            </div>
+            <button class="btn-ghost" onclick="goTo('screen-sos')" style="background:rgba(220,38,38,0.85);color:#fff;font-weight:500;padding:8px 14px;">
+              <i class="ti ti-alert-triangle" style="font-size:16px;" aria-hidden="true"></i> SOS
+            </button>
+          </div>
+        </div>
+        <div class="map-bottom">
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:4px;"><i class="ti ti-map-pin" style="font-size:12px;" aria-hidden="true"></i> Your location</div>
+          <div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:2px;">Kaduna–Abuja Highway</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.45);">Near Kateri Junction · Updated just now</div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <span class="pill pill-green"><span class="pulse-dot"></span> GPS Active</span>
+            <span class="pill pill-gold"><i class="ti ti-message" style="font-size:11px;" aria-hidden="true"></i> SMS Ready</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:10px 16px 0;background:#0A3D2E;">
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:8px;">Tracked contacts</div>
+        <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;" id="contactScroll">
+          <div class="card" style="min-width:130px;margin:0;cursor:pointer;" onclick="goTo('screen-contact-detail')">
+            <div class="avatar" style="background:rgba(45,155,104,0.2);color:#7DEBB0;margin-bottom:6px;">AM</div>
+            <div style="font-size:13px;font-weight:500;color:#fff;">Amina</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.45);">Kano Road</div>
+            <span class="pill pill-green" style="margin-top:4px;font-size:10px;"><span class="pulse-dot"></span> Live</span>
+          </div>
+          <div class="card" style="min-width:130px;margin:0;cursor:pointer;" onclick="goTo('screen-contact-detail')">
+            <div class="avatar" style="background:rgba(244,169,42,0.2);color:#F4A92A;margin-bottom:6px;">EO</div>
+            <div style="font-size:13px;font-weight:500;color:#fff;">Emeka</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.45);">Lagos Island</div>
+            <span class="pill pill-gold" style="margin-top:4px;font-size:10px;"><i class="ti ti-message" style="font-size:10px;" aria-hidden="true"></i> SMS</span>
+          </div>
+          <div class="card" style="min-width:130px;margin:0;cursor:pointer;" onclick="goTo('screen-contact-detail')">
+            <div class="avatar" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);margin-bottom:6px;">FA</div>
+            <div style="font-size:13px;font-weight:500;color:#fff;">Fatima</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.45);">Last: 14 min ago</div>
+            <span class="pill pill-gray" style="margin-top:4px;font-size:10px;"><i class="ti ti-wifi-off" style="font-size:10px;" aria-hidden="true"></i> Offline</span>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="goTo('screen-dashboard')"><i class="ti ti-map" aria-hidden="true"></i>Map</button>
+        <button class="tab-btn" onclick="goTo('screen-tracking')"><i class="ti ti-fingerprint" aria-hidden="true"></i>Track</button>
+        <button class="tab-btn" onclick="goTo('screen-contacts')"><i class="ti ti-users" aria-hidden="true"></i>Contacts</button>
+        <button class="tab-btn" onclick="goTo('screen-settings')"><i class="ti ti-settings" aria-hidden="true"></i>Settings</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 7: TRACKING ACTIVE -->
+    <div class="screen" id="screen-tracking" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="padding:0 16px;flex:1;overflow-y:auto;" id="trackingBody">
+        <div style="font-size:20px;font-weight:500;color:#fff;margin-bottom:4px;">My Tracking</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:18px;">Activate sharing with your fingerprint</div>
+
+        <div style="text-align:center;margin-bottom:24px;">
+          <div id="fpStatus" style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:16px;">Press to activate location sharing</div>
+          <div class="fp-ring" id="fpRing">
+            <div class="fp-ring-inner" onclick="activateTracking()" id="fpBtn">
+              <i class="ti ti-fingerprint" aria-label="Activate tracking with fingerprint"></i>
+            </div>
+          </div>
+          <div id="fpLabel" style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:12px;">Touch to share location</div>
+        </div>
+
+        <div class="card" style="margin-bottom:12px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:10px;">Connection method</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="pill pill-green" id="methodGps"><i class="ti ti-satellite" style="font-size:11px;" aria-hidden="true"></i> GPS</span>
+            <span class="pill pill-gold" id="methodSms"><i class="ti ti-message" style="font-size:11px;" aria-hidden="true"></i> SMS Fallback</span>
+            <span class="pill pill-gray" id="methodCell"><i class="ti ti-antenna" style="font-size:11px;" aria-hidden="true"></i> Cell Towers</span>
+          </div>
+        </div>
+
+        <div class="card" id="trackingStatus" style="display:none;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:13px;font-weight:500;color:#fff;">Sharing active</div>
+            <span class="badge-live"><span class="pulse-dot"></span> Broadcasting</span>
+          </div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:4px;">Your location is visible to:</div>
+          <div style="display:flex;gap:-8px;margin-bottom:10px;">
+            <div class="avatar" style="background:rgba(45,155,104,0.2);color:#7DEBB0;width:32px;height:32px;font-size:11px;">AM</div>
+            <div class="avatar" style="background:rgba(244,169,42,0.2);color:#F4A92A;width:32px;height:32px;font-size:11px;margin-left:-8px;">EO</div>
+            <div class="avatar" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);width:32px;height:32px;font-size:11px;margin-left:-8px;">FA</div>
+          </div>
+          <button onclick="deactivateTracking()" style="background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);color:#FCA5A5;border-radius:10px;padding:8px;width:100%;font-size:13px;cursor:pointer;">
+            <i class="ti ti-player-stop" style="font-size:13px;" aria-hidden="true"></i> Stop Sharing
+          </button>
+        </div>
+
+        <div class="section-label">Button phone users</div>
+        <div class="card">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">For basic phones — send SMS to activate:</div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:10px;padding:10px;font-family:var(--font-mono);font-size:13px;color:#F4A92A;margin-bottom:6px;">START → +234 800 SAFETRACE</div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:10px;padding:10px;font-family:var(--font-mono);font-size:13px;color:#F4A92A;margin-bottom:6px;">STOP → +234 800 SAFETRACE</div>
+          <div style="background:rgba(220,38,38,0.2);border-radius:10px;padding:10px;font-family:var(--font-mono);font-size:13px;color:#FCA5A5;">SOS → +234 800 SAFETRACE</div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn" onclick="goTo('screen-dashboard')"><i class="ti ti-map" aria-hidden="true"></i>Map</button>
+        <button class="tab-btn active" onclick="goTo('screen-tracking')"><i class="ti ti-fingerprint" aria-hidden="true"></i>Track</button>
+        <button class="tab-btn" onclick="goTo('screen-contacts')"><i class="ti ti-users" aria-hidden="true"></i>Contacts</button>
+        <button class="tab-btn" onclick="goTo('screen-settings')"><i class="ti ti-settings" aria-hidden="true"></i>Settings</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 8: CONTACTS -->
+    <div class="screen" id="screen-contacts" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="padding:0 16px;flex:1;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div>
+            <div style="font-size:20px;font-weight:500;color:#fff;">Trusted Contacts</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);">3 of 5 slots used</div>
+          </div>
+          <button class="btn-ghost" onclick="goTo('screen-add-contact')" style="padding:8px 12px;">
+            <i class="ti ti-plus" style="font-size:16px;" aria-hidden="true"></i> Add
+          </button>
+        </div>
+
+        <div class="contact-row">
+          <div class="avatar" style="background:rgba(45,155,104,0.2);color:#7DEBB0;">AM</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:#fff;">Amina Musa</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);">+234 803 456 7890</div>
+          </div>
+          <span class="pill pill-green" style="font-size:10px;"><span class="pulse-dot"></span> Live</span>
+        </div>
+        <div class="contact-row">
+          <div class="avatar" style="background:rgba(244,169,42,0.2);color:#F4A92A;">EO</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:#fff;">Emeka Okafor</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);">+234 812 345 6789</div>
+          </div>
+          <span class="pill pill-gold" style="font-size:10px;">SMS</span>
+        </div>
+        <div class="contact-row">
+          <div class="avatar" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);">FA</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:#fff;">Fatima Aliyu</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);">+234 701 234 5678</div>
+          </div>
+          <span class="pill pill-gray" style="font-size:10px;">Offline</span>
+        </div>
+
+        <div class="section-label">My tracking key</div>
+        <div class="card">
+          <div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:8px;">Share this key so others can track you</div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:var(--font-mono);font-size:16px;font-weight:500;color:#F4A92A;letter-spacing:3px;">ST-9X4K</span>
+            <button class="btn-ghost" style="padding:6px 10px;font-size:12px;"><i class="ti ti-copy" style="font-size:13px;" aria-hidden="true"></i> Copy</button>
+          </div>
+        </div>
+
+        <div class="section-label">Add slots</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <div style="flex:1;background:rgba(255,255,255,0.04);border:1.5px dashed rgba(255,255,255,0.15);border-radius:12px;height:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="goTo('screen-add-contact')">
+            <i class="ti ti-plus" style="font-size:20px;color:rgba(255,255,255,0.25);" aria-hidden="true"></i>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.04);border:1.5px dashed rgba(255,255,255,0.15);border-radius:12px;height:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="goTo('screen-add-contact')">
+            <i class="ti ti-plus" style="font-size:20px;color:rgba(255,255,255,0.25);" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn" onclick="goTo('screen-dashboard')"><i class="ti ti-map" aria-hidden="true"></i>Map</button>
+        <button class="tab-btn" onclick="goTo('screen-tracking')"><i class="ti ti-fingerprint" aria-hidden="true"></i>Track</button>
+        <button class="tab-btn active" onclick="goTo('screen-contacts')"><i class="ti ti-users" aria-hidden="true"></i>Contacts</button>
+        <button class="tab-btn" onclick="goTo('screen-settings')"><i class="ti ti-settings" aria-hidden="true"></i>Settings</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 9: ADD CONTACT -->
+    <div class="screen" id="screen-add-contact" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div class="nav-bar">
+        <button onclick="goTo('screen-contacts')" style="background:none;border:none;color:#F4A92A;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;font-size:14px;">
+          <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i>
+        </button>
+        <div style="font-size:17px;font-weight:500;color:#fff;">Add Contact</div>
+      </div>
+      <div style="padding:0 16px;flex:1;overflow-y:auto;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px;">Enter their details or share your tracking key</div>
+        <input class="input-field" type="text" placeholder="Full name" />
+        <input class="input-field" type="tel" placeholder="Phone number (+234...)" />
+        <input class="input-field" type="text" placeholder="Their SafeTrace key (e.g. ST-9X4K)" />
+
+        <div class="divider"></div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:12px;">Or invite them to join</div>
+        <button class="btn-ghost" style="width:100%;justify-content:center;margin-bottom:12px;">
+          <i class="ti ti-share" style="font-size:16px;" aria-hidden="true"></i> Share invite via SMS
+        </button>
+        <button class="btn-ghost" style="width:100%;justify-content:center;margin-bottom:16px;">
+          <i class="ti ti-brand-whatsapp" style="font-size:16px;" aria-hidden="true"></i> Share via WhatsApp
+        </button>
+        <button class="btn-primary" onclick="goTo('screen-contacts')">Save Contact</button>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 10: CONTACT DETAIL -->
+    <div class="screen" id="screen-contact-detail" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div class="nav-bar">
+        <button onclick="goTo('screen-dashboard')" style="background:none;border:none;color:#F4A92A;cursor:pointer;padding:0;">
+          <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i>
+        </button>
+        <div style="font-size:17px;font-weight:500;color:#fff;">Amina Musa</div>
+      </div>
+      <div class="map-bg" style="height:200px;flex:none;position:relative;">
+        <svg width="100%" height="100%">
+          <defs><pattern id="grid2" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#grid2)"/>
+          <circle cx="155" cy="110" r="20" fill="rgba(45,155,104,0.2)" stroke="#2D9B68" stroke-width="1.5"/>
+          <circle cx="155" cy="110" r="7" fill="#2D9B68"/>
+          <circle cx="155" cy="110" r="3" fill="#fff"/>
+          <path d="M 50 130 Q 110 120 155 110 Q 200 100 240 90" stroke="#2D9B68" stroke-width="2" fill="none" stroke-dasharray="4,4" opacity="0.5"/>
+        </svg>
+        <div style="position:absolute;bottom:10px;left:12px;">
+          <span class="badge-live"><span class="pulse-dot"></span> Live · Kano Road</span>
+        </div>
+      </div>
+      <div style="padding:12px 16px;flex:1;overflow-y:auto;">
+        <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;text-align:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Speed</div>
+            <div style="font-size:18px;font-weight:500;color:#fff;">42 <span style="font-size:11px;color:rgba(255,255,255,0.4);">km/h</span></div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;text-align:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Battery</div>
+            <div style="font-size:18px;font-weight:500;color:#7DEBB0;">68%</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;text-align:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Signal</div>
+            <div style="font-size:18px;font-weight:500;color:#F4A92A;">MTN</div>
+          </div>
+        </div>
+        <div class="section-label">Location history today</div>
+        <div class="contact-row" style="border-color:rgba(255,255,255,0.07);">
+          <i class="ti ti-map-pin" style="color:#2D9B68;font-size:18px;" aria-hidden="true"></i>
+          <div style="flex:1;"><div style="font-size:13px;color:#fff;">Kano Road Junction</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">Now · via GPS</div></div>
+        </div>
+        <div class="contact-row" style="border-color:rgba(255,255,255,0.07);">
+          <i class="ti ti-map-pin" style="color:rgba(255,255,255,0.3);font-size:18px;" aria-hidden="true"></i>
+          <div style="flex:1;"><div style="font-size:13px;color:#fff;">Zaria Market</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">1 hr ago · via SMS</div></div>
+        </div>
+        <div class="contact-row" style="border-color:transparent;">
+          <i class="ti ti-map-pin" style="color:rgba(255,255,255,0.3);font-size:18px;" aria-hidden="true"></i>
+          <div style="flex:1;"><div style="font-size:13px;color:#fff;">Sabon Gari</div><div style="font-size:11px;color:rgba(255,255,255,0.4);">3 hrs ago · via Cell Tower</div></div>
+        </div>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 11: SOS -->
+    <div class="screen" id="screen-sos" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div class="nav-bar">
+        <button onclick="goTo('screen-dashboard')" style="background:none;border:none;color:#F4A92A;cursor:pointer;padding:0;">
+          <i class="ti ti-arrow-left" style="font-size:18px;" aria-hidden="true"></i>
+        </button>
+        <div style="font-size:17px;font-weight:500;color:#fff;">Emergency SOS</div>
+      </div>
+      <div style="padding:0 16px;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div class="card" style="border:1px solid rgba(220,38,38,0.3);background:rgba(220,38,38,0.1);margin-bottom:16px;">
+            <div style="font-size:13px;color:#FCA5A5;line-height:1.6;">This will immediately alert <strong style="color:#fff;">all 3 trusted contacts</strong> with your live location — even without internet, via SMS.</div>
+          </div>
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:20px;">Hold button for 3 seconds to send</div>
+            <div id="sosRing" style="width:130px;height:130px;border-radius:50%;border:3px solid rgba(220,38,38,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+              <button id="sosHoldBtn" class="sos-btn" onmousedown="startSos()" onmouseup="cancelSos()" ontouchstart="startSos()" ontouchend="cancelSos()" style="width:100px;height:100px;border-radius:50%;font-size:13px;flex-direction:column;gap:4px;padding:0;">
+                <i class="ti ti-alert-triangle" style="font-size:28px;" aria-label="SOS emergency button"></i>
+                SOS
+              </button>
+            </div>
+          </div>
+          <div id="sosProgress" style="display:none;margin-bottom:16px;">
+            <div style="font-size:13px;color:#FCA5A5;text-align:center;margin-bottom:8px;">Sending alert...</div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:4px;overflow:hidden;">
+              <div id="sosBar" style="height:100%;background:#DC2626;width:0%;transition:width 3s linear;border-radius:4px;"></div>
+            </div>
+          </div>
+          <div id="sosSent" style="display:none;" class="card" style="border:1px solid rgba(45,155,104,0.3);background:rgba(45,155,104,0.1);text-align:center;padding:16px;">
+            <i class="ti ti-circle-check" style="font-size:32px;color:#7DEBB0;margin-bottom:8px;" aria-hidden="true"></i>
+            <div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:4px;">Alert sent!</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">3 contacts notified via SMS + app</div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" style="margin-top:0;">Will be alerted</div>
+          <div style="display:flex;gap:8px;margin-bottom:16px;">
+            <div style="flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;">
+              <div class="avatar" style="background:rgba(45,155,104,0.2);color:#7DEBB0;width:32px;height:32px;font-size:11px;">AM</div>
+              <div style="font-size:12px;color:#fff;">Amina</div>
+            </div>
+            <div style="flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;">
+              <div class="avatar" style="background:rgba(244,169,42,0.2);color:#F4A92A;width:32px;height:32px;font-size:11px;">EO</div>
+              <div style="font-size:12px;color:#fff;">Emeka</div>
+            </div>
+            <div style="flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;">
+              <div class="avatar" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);width:32px;height:32px;font-size:11px;">FA</div>
+              <div style="font-size:12px;color:#fff;">Fatima</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scripture">"The horse is prepared against the day of battle: but safety is of the LORD." — Proverbs 21:31 (KJV)</div>
+      <div style="height:10px;"></div>
+    </div>
+
+    <!-- SCREEN 12: SETTINGS -->
+    <div class="screen" id="screen-settings" style="background:#0A3D2E;">
+      <div class="status-bar" style="color:rgba(255,255,255,0.6);">
+        <span>9:41</span><span style="display:flex;gap:4px;"><i class="ti ti-wifi" style="font-size:14px;" aria-hidden="true"></i><i class="ti ti-battery" style="font-size:14px;" aria-hidden="true"></i></span>
+      </div>
+      <div style="padding:0 16px;flex:1;overflow-y:auto;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div class="avatar" style="background:rgba(244,169,42,0.2);color:#F4A92A;width:52px;height:52px;font-size:18px;">OA</div>
+          <div>
+            <div style="font-size:16px;font-weight:500;color:#fff;">Olusegun Adeyemi</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);">+234 802 123 4567</div>
+          </div>
+        </div>
+
+        <div class="section-label">Tracking</div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-size:14px;color:#fff;">Background tracking</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Keep sharing when app is closed</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-size:14px;color:#fff;">SMS fallback</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Use SMS when no data available</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-size:14px;color:#fff;">Cell tower mode</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Track via towers when GPS is off</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+
+        <div class="section-label">Notifications</div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-size:14px;color:#fff;">Contact moved alerts</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Notify when contacts change location</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-size:14px;color:#fff;">Signal lost alerts</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">Alert when contact goes offline</div>
+          </div>
+          <div class="toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+
+        <div class="section-label">Map</div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-size:14px;color:#fff;">Download offline maps</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);">OpenStreetMap · All 36 states</div>
+          </div>
+          <button class="btn-ghost" style="padding:6px 10px;font-size:12px;">
+            <i class="ti ti-download" style="font-size:13px;" aria-hidden="true"></i> 240 MB
+          </button>
+        </div>
+
+        <div class="section-label">Account</div>
+        <div class="toggle-row" style="cursor:pointer;" onclick="goTo('screen-splash')">
+          <div style="font-size:14px;color:#FCA5A5;">Sign out</div>
+          <i class="ti ti-logout" style="color:rgba(255,255,255,0.3);font-size:18px;" aria-hidden="true"></i>
+        </div>
+
+        <div style="margin-top:16px;text-align:center;font-size:11px;color:rgba(255,255,255,0.2);">SafeTrace v1.0.0 · Built for Nigeria</div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn" onclick="goTo('screen-dashboard')"><i class="ti ti-map" aria-hidden="true"></i>Map</button>
+        <button class="tab-btn" onclick="goTo('screen-tracking')"><i class="ti ti-fingerprint" aria-hidden="true"></i>Track</button>
+        <button class="tab-btn" onclick="goTo('screen-contacts')"><i class="ti ti-users" aria-hidden="true"></i>Contacts</button>
+        <button class="tab-btn active" onclick="goTo('screen-settings')"><i class="ti ti-settings" aria-hidden="true"></i>Settings</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:340px;">
+    <button onclick="goTo('screen-splash')" style="background:rgba(244,169,42,0.12);border:1px solid rgba(244,169,42,0.3);color:#F4A92A;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">Splash</button>
+    <button onclick="goTo('screen-onboard1')" style="background:rgba(244,169,42,0.12);border:1px solid rgba(244,169,42,0.3);color:#F4A92A;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">Onboarding</button>
+    <button onclick="goTo('screen-login')" style="background:rgba(244,169,42,0.12);border:1px solid rgba(244,169,42,0.3);color:#F4A92A;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">Login</button>
+    <button onclick="goTo('screen-dashboard')" style="background:rgba(244,169,42,0.12);border:1px solid rgba(244,169,42,0.3);color:#F4A92A;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">Dashboard</button>
+    <button onclick="goTo('screen-tracking')" style="background:rgba(244,169,42,0.12);border:1px solid rgba(244,169,42,0.3);color:#F4A92A;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">Track</button>
+    <button onclick="goTo('screen-sos')" style="background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);color:#FCA5A5;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">SOS</button>
+    <button onclick="goTo('screen-settings')" style="background:rgba(244,169,42,0.12);border:1px solid rgba(244,169,42,0.3);color:#F4A92A;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;">Settings</button>
+  </div>
+</div>
+
+<script>
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  const flash = document.getElementById('flashOverlay');
+  flash.classList.add('show');
+  setTimeout(() => flash.classList.remove('show'), 300);
+}
+
+function fpLogin() {
+  const inner = document.querySelector('#screen-login .fp-ring-inner');
+  inner.style.background = 'rgba(244,169,42,0.35)';
+  setTimeout(() => { inner.style.background = ''; goTo('screen-dashboard'); }, 600);
+}
+
+let trackingActive = false;
+function activateTracking() {
+  if (trackingActive) return;
+  trackingActive = true;
+  const btn = document.getElementById('fpBtn');
+  const status = document.getElementById('fpStatus');
+  const label = document.getElementById('fpLabel');
+  const trackCard = document.getElementById('trackingStatus');
+  btn.style.background = 'rgba(244,169,42,0.35)';
+  status.textContent = 'Scanning fingerprint...';
+  setTimeout(() => {
+    btn.style.background = 'rgba(45,155,104,0.25)';
+    btn.style.borderColor = 'rgba(45,155,104,0.7)';
+    btn.querySelector('i').style.color = '#7DEBB0';
+    status.textContent = 'Identity confirmed ✓';
+    label.textContent = 'Sharing active — tap to stop';
+    trackCard.style.display = 'block';
+  }, 800);
+}
+function deactivateTracking() {
+  trackingActive = false;
+  const btn = document.getElementById('fpBtn');
+  const status = document.getElementById('fpStatus');
+  const label = document.getElementById('fpLabel');
+  const trackCard = document.getElementById('trackingStatus');
+  btn.style.background = '';
+  btn.style.borderColor = '';
+  btn.querySelector('i').style.color = '#F4A92A';
+  status.textContent = 'Press to activate location sharing';
+  label.textContent = 'Touch to share location';
+  trackCard.style.display = 'none';
+}
+
+let sosTimer = null;
+function startSos() {
+  const progress = document.getElementById('sosProgress');
+  const bar = document.getElementById('sosBar');
+  progress.style.display = 'block';
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = '100%'; }, 50);
+  sosTimer = setTimeout(() => {
+    progress.style.display = 'none';
+    document.getElementById('sosSent').style.display = 'block';
+    document.getElementById('sosHoldBtn').disabled = true;
+  }, 3000);
+}
+function cancelSos() {
+  if (sosTimer) { clearTimeout(sosTimer); sosTimer = null; }
+  const progress = document.getElementById('sosProgress');
+  const bar = document.getElementById('sosBar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.transition = 'width 3s linear'; }, 50);
+  progress.style.display = 'none';
+}
+</script>
